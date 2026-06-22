@@ -1,11 +1,21 @@
 import { Outlet, Navigate, useLocation } from 'react-router-dom'
-import { LogOut, LampDesk } from 'lucide-react'
+import { LogOut, LampDesk, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import useAuthStore from '@/stores/useAuthStore'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Layout() {
-  const { isAuthenticated, logout } = useAuthStore()
+  const { user, signOut, loading } = useAuth()
   const location = useLocation()
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    )
+  }
+
+  const isAuthenticated = !!user
 
   if (!isAuthenticated && location.pathname !== '/') {
     return <Navigate to="/" replace />
@@ -32,7 +42,7 @@ export default function Layout() {
               variant="ghost"
               size="sm"
               className="text-muted-foreground hover:text-accent hover:bg-accent/10 transition-colors"
-              onClick={logout}
+              onClick={() => signOut()}
             >
               <LogOut className="w-4 h-4 mr-2" />
               Sair

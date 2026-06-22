@@ -6,14 +6,14 @@ import { Label } from '@/components/ui/label'
 import { LampDesk, Loader2, ArrowRight } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
-import useAuthStore from '@/stores/useAuthStore'
+import { useAuth } from '@/hooks/use-auth'
 
 export default function Index() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isExiting, setIsExiting] = useState(false)
-  const { login } = useAuthStore()
+  const { signIn } = useAuth()
   const { toast } = useToast()
   const navigate = useNavigate()
 
@@ -21,12 +21,11 @@ export default function Index() {
     e.preventDefault()
     setIsLoading(true)
 
-    await new Promise((resolve) => setTimeout(resolve, 800))
+    const { error } = await signIn(email, password)
 
-    if (email === 'admin@lucenera.com' && password === 'admin123') {
+    if (!error) {
       setIsExiting(true)
       setTimeout(() => {
-        login()
         navigate('/dashboard')
       }, 300)
     } else {
@@ -87,7 +86,7 @@ export default function Index() {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@lucenera.com"
+                placeholder="pedro@lucenera.com.br"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
