@@ -5512,6 +5512,33 @@ export type Database = {
           },
         ]
       }
+      systems: {
+        Row: {
+          description: string
+          display_order: number | null
+          icon_name: string | null
+          id: string
+          link: string
+          name: string
+        }
+        Insert: {
+          description: string
+          display_order?: number | null
+          icon_name?: string | null
+          id?: string
+          link: string
+          name: string
+        }
+        Update: {
+          description?: string
+          display_order?: number | null
+          icon_name?: string | null
+          id?: string
+          link?: string
+          name?: string
+        }
+        Relationships: []
+      }
       transacoes: {
         Row: {
           acordo: number | null
@@ -7143,6 +7170,7 @@ export type Database = {
         Returns: number
       }
       get_latest_transaction_id: { Args: never; Returns: string }
+      get_next_sku: { Args: { prefix: string }; Returns: string }
       get_user_role: { Args: never; Returns: string }
       get_vendedores: {
         Args: never
@@ -7166,7 +7194,24 @@ export type Database = {
       conta_tipo: 'Corrente' | 'Poupança' | 'CDB' | 'Investimento' | 'Caixa'
       contato_tipo: 'cliente' | 'arquiteto' | 'engenheiro' | 'eletricista' | 'fornecedor' | 'outro'
       entrega_status: 'Pendente' | 'Em rota' | 'Entregue' | 'Cancelado'
-      estoque_local: 'Estoque' | 'Showroom' | 'Em trânsito' | 'Reservado'
+      estoque_local:
+        | 'Estoque'
+        | 'Showroom'
+        | 'Em trânsito'
+        | 'Reservado'
+        | 'Estoque Geral'
+        | 'Estoque Luce Nera'
+        | 'Estoque Islight'
+        | 'Estoque Foco'
+        | 'Estoque Garantia'
+        | 'Estoque Casa Cor'
+        | 'Reserva'
+        | 'Separação'
+        | 'Entrega Futura'
+        | 'Devolução'
+        | 'Estoque Defeito'
+        | 'Amostra / Emprestado'
+        | 'Estoque Citel'
       frequencia_tipo: 'mensal' | 'trimestral' | 'semestral' | 'anual'
       funcao_separacao_type: 'admin' | 'operador' | 'entregador' | 'user'
       lancamento_status: 'pendente' | 'pago' | 'cancelado'
@@ -7335,7 +7380,25 @@ export const Constants = {
       conta_tipo: ['Corrente', 'Poupança', 'CDB', 'Investimento', 'Caixa'],
       contato_tipo: ['cliente', 'arquiteto', 'engenheiro', 'eletricista', 'fornecedor', 'outro'],
       entrega_status: ['Pendente', 'Em rota', 'Entregue', 'Cancelado'],
-      estoque_local: ['Estoque', 'Showroom', 'Em trânsito', 'Reservado'],
+      estoque_local: [
+        'Estoque',
+        'Showroom',
+        'Em trânsito',
+        'Reservado',
+        'Estoque Geral',
+        'Estoque Luce Nera',
+        'Estoque Islight',
+        'Estoque Foco',
+        'Estoque Garantia',
+        'Estoque Casa Cor',
+        'Reserva',
+        'Separação',
+        'Entrega Futura',
+        'Devolução',
+        'Estoque Defeito',
+        'Amostra / Emprestado',
+        'Estoque Citel',
+      ],
       frequencia_tipo: ['mensal', 'trimestral', 'semestral', 'anual'],
       funcao_separacao_type: ['admin', 'operador', 'entregador', 'user'],
       lancamento_status: ['pendente', 'pago', 'cancelado'],

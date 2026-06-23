@@ -11,6 +11,8 @@
     "sync-teams": 2,
     "enviar-confirmacao-email": 2,
     "parse-budget-pdf": 6,
-    "process-budget-pdf": 4
+    "process-budget-pdf": 4,
+    "process-billing-automation": 2,
+    "process-remittance": 1
   }
 }
