@@ -7,6 +7,7 @@ import { AuthProvider } from '@/hooks/use-auth'
 import Layout from './components/Layout'
 import Index from './pages/Index'
 import Dashboard from './pages/Dashboard'
+import AdminPage from './pages/admin/AdminPage'
 import NotFound from './pages/NotFound'
 
 const App = () => (
@@ -19,6 +20,7 @@ const App = () => (
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/admin/settings" element={<AdminPage />} />
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
