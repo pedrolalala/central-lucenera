@@ -13,28 +13,29 @@ Deno.serve(async (req: Request) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     )
 
-    // Fetch pending boletos
+    // Fetch boletos ready for remittance
     const { data: boletos, error } = await supabaseClient
       .from('boletos')
       .select('*')
-      .eq('status', 'Pendente')
+      .in('status', ['Remessa Pendente', 'pendente_registro'])
 
     if (error) throw error
 
     if (!boletos || boletos.length === 0) {
-      return new Response(JSON.stringify({ message: 'Nenhum boleto pendente para remessa' }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      })
+      return new Response(
+        JSON.stringify({ message: 'Nenhum boleto pronto para remessa.', processed: 0 }),
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
+      )
     }
 
-    // Update to 'Remessa Enviada'
+    // Update to 'Aguardando Retorno'
     const ids = boletos.map((b) => b.id)
-    await supabaseClient.from('boletos').update({ status: 'Remessa Enviada' }).in('id', ids)
+    await supabaseClient.from('boletos').update({ status: 'Aguardando Retorno' }).in('id', ids)
 
-    // Send mock notification
+    // Send mock notification to Teams
     await supabaseClient.functions.invoke('sync-teams', {
       body: {
-        message: `Arquivo de Remessa processado com ${ids.length} boletos.`,
+        message: `Arquivo de Remessa processado com ${ids.length} boletos. Aguardando retorno bancário.`,
         to: 'Financeiro',
       },
     })

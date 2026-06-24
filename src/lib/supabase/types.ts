@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       boletos: {
         Row: {
+          comprovante_url: string | null
           data_pagamento: string | null
           emissao: string | null
           empresa_id: string | null
@@ -32,6 +33,7 @@ export type Database = {
           venda: string | null
         }
         Insert: {
+          comprovante_url?: string | null
           data_pagamento?: string | null
           emissao?: string | null
           empresa_id?: string | null
@@ -53,6 +55,7 @@ export type Database = {
           venda?: string | null
         }
         Update: {
+          comprovante_url?: string | null
           data_pagamento?: string | null
           emissao?: string | null
           empresa_id?: string | null
