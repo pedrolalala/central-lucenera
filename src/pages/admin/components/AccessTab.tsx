@@ -53,15 +53,21 @@ export function AccessTab({ users }: { users: any[] }) {
       const { error } = await supabase
         .from('user_system_access')
         .insert({ user_id: selectedUserId, system_id: systemId })
-      if (error)
+      if (error) {
         toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao conceder acesso' })
+      } else {
+        toast({ title: 'Sucesso', description: 'Acesso concedido com sucesso' })
+      }
     } else {
       const { error } = await supabase
         .from('user_system_access')
         .delete()
         .match({ user_id: selectedUserId, system_id: systemId })
-      if (error)
+      if (error) {
         toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao remover acesso' })
+      } else {
+        toast({ title: 'Sucesso', description: 'Acesso removido com sucesso' })
+      }
     }
   }
 
