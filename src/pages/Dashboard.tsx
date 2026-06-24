@@ -37,23 +37,15 @@ export default function Dashboard() {
       if (!user || !profile) return
 
       setFetching(true)
-      if (profile.role === 'admin') {
-        const { data } = await supabase
-          .from('systems')
-          .select('*')
-          .order('display_order', { ascending: true })
-        if (data) setSystems(data)
-      } else {
-        const { data } = await supabase
-          .from('user_system_access')
-          .select('system_id, systems(*)')
-          .eq('user_id', user.id)
+      const { data } = await supabase
+        .from('user_system_access')
+        .select('system_id, systems(*)')
+        .eq('user_id', user.id)
 
-        if (data) {
-          const allowedSystems = data.map((d: any) => d.systems).filter(Boolean)
-          allowedSystems.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))
-          setSystems(allowedSystems)
-        }
+      if (data) {
+        const allowedSystems = data.map((d: any) => d.systems).filter(Boolean)
+        allowedSystems.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))
+        setSystems(allowedSystems)
       }
       setFetching(false)
     }

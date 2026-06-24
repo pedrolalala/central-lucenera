@@ -36,7 +36,7 @@ export default function AdminPage() {
     <div className="container mx-auto max-w-[1200px] py-10 px-4 sm:px-6 flex-1 animate-fade-in">
       <div className="mb-10 flex flex-col gap-3">
         <h1 className="text-4xl font-display font-semibold text-primary tracking-tight">
-          Configurações de Admin
+          Administração
         </h1>
         <p className="text-muted-foreground text-lg max-w-3xl leading-relaxed">
           Gerencie permissões de usuários, controle o acesso aos sistemas internos e monitore as

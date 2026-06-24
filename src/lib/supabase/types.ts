@@ -5864,6 +5864,46 @@ export type Database = {
         }
         Relationships: []
       }
+      user_system_access: {
+        Row: {
+          created_at: string
+          system_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          system_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          system_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'user_system_access_system_id_fkey'
+            columns: ['system_id']
+            isOneToOne: false
+            referencedRelation: 'systems'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_system_access_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'user_system_access_user_id_fkey'
+            columns: ['user_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
       usuarios: {
         Row: {
           ativo: boolean | null

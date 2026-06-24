@@ -38,11 +38,11 @@ export default function Layout() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => navigate('/admin/settings')}
-                  className={`text-muted-foreground hover:text-primary transition-colors ${location.pathname === '/admin/settings' ? 'text-primary bg-primary/10' : ''}`}
+                  onClick={() => navigate('/admin')}
+                  className={`text-muted-foreground hover:text-primary transition-colors ${location.pathname.startsWith('/admin') ? 'text-primary bg-primary/10' : ''}`}
                 >
                   <Settings className="w-4 h-4 sm:mr-2" />
-                  <span className="hidden sm:inline">Admin</span>
+                  <span className="hidden sm:inline">Administração</span>
                 </Button>
               )}
               <Button
