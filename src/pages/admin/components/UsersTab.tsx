@@ -14,6 +14,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { Switch } from '@/components/ui/switch'
 import { Badge } from '@/components/ui/badge'
 import { useToast } from '@/hooks/use-toast'
 
@@ -35,6 +36,19 @@ export function UsersTab({ users, fetchUsers }: UsersTabProps) {
     }
   }
 
+  const handleActiveToggle = async (userId: string, currentVal: boolean) => {
+    const { error } = await supabase
+      .from('usuarios')
+      .update({ ativo: !currentVal })
+      .eq('id', userId)
+    if (error) {
+      toast({ title: 'Erro', description: 'Falha ao atualizar status', variant: 'destructive' })
+    } else {
+      toast({ title: 'Sucesso', description: 'Status atualizado com sucesso' })
+      fetchUsers()
+    }
+  }
+
   return (
     <div className="rounded-md border border-border overflow-hidden">
       <Table>
@@ -52,14 +66,21 @@ export function UsersTab({ users, fetchUsers }: UsersTabProps) {
               <TableCell className="font-medium">{u.nome || 'Não definido'}</TableCell>
               <TableCell className="text-muted-foreground">{u.email}</TableCell>
               <TableCell>
-                <Badge
-                  variant={u.ativo !== false ? 'default' : 'secondary'}
-                  className={
-                    u.ativo !== false ? 'bg-primary/20 text-primary hover:bg-primary/30' : ''
-                  }
-                >
-                  {u.ativo !== false ? 'Ativo' : 'Inativo'}
-                </Badge>
+                <div className="flex items-center gap-3">
+                  <Switch
+                    checked={u.ativo !== false}
+                    onCheckedChange={() => handleActiveToggle(u.id, u.ativo !== false)}
+                    className="data-[state=checked]:bg-primary"
+                  />
+                  <Badge
+                    variant={u.ativo !== false ? 'default' : 'secondary'}
+                    className={
+                      u.ativo !== false ? 'bg-primary/20 text-primary hover:bg-primary/30' : ''
+                    }
+                  >
+                    {u.ativo !== false ? 'Ativo' : 'Inativo'}
+                  </Badge>
+                </div>
               </TableCell>
               <TableCell>
                 <Select
