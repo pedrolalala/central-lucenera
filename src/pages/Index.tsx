@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { LampDesk, Loader2, ArrowRight } from 'lucide-react'
+import { Loader2, ArrowRight } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/use-auth'
+import logoUrl from '@/assets/logotipo-verticalv1branco-0271a.png'
 
 export default function Index() {
   const [email, setEmail] = useState('')
@@ -58,15 +59,17 @@ export default function Index() {
         )}
       >
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="w-16 h-16 bg-primary rounded-2xl flex items-center justify-center mb-6 shadow-[0_0_20px_rgba(245,158,11,0.3)]">
-            <LampDesk size={32} className="text-primary-foreground" />
+          <div className="mb-6 flex justify-center">
+            <img
+              src={logoUrl}
+              alt="Luce Nera Logo"
+              className="h-24 sm:h-28 w-auto object-contain drop-shadow-xl"
+            />
           </div>
-          <h1 className="text-3xl font-display font-semibold tracking-tight text-foreground">
-            Central Lucenera
+          <h1 className="text-2xl font-display font-medium tracking-tight text-foreground/90">
+            Central de Sistemas
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
-            Plataforma unificada para gestão de sistemas
-          </p>
+          <p className="text-muted-foreground mt-2 text-sm">Plataforma unificada para gestão</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">

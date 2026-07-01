@@ -1,7 +1,8 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
-import { LogOut, LampDesk, Settings } from 'lucide-react'
+import { LogOut, Settings } from 'lucide-react'
+import logoUrl from '@/assets/logotipo-verticalv1branco-0271a.png'
 
 export default function Layout() {
   const { user, profile, signOut } = useAuth()
@@ -23,14 +24,15 @@ export default function Layout() {
           <div className="container mx-auto px-4 h-16 flex items-center justify-between max-w-[1200px]">
             <div className="flex items-center gap-3">
               <div
-                className="w-10 h-10 bg-primary/5 rounded-lg flex items-center justify-center border border-accent/20 shadow-sm cursor-pointer"
+                className="cursor-pointer transition-opacity hover:opacity-80 flex items-center justify-center"
                 onClick={() => navigate('/dashboard')}
               >
-                <LampDesk className="w-5 h-5 text-accent" />
+                <img
+                  src={logoUrl}
+                  alt="Luce Nera"
+                  className="h-10 sm:h-12 w-auto object-contain drop-shadow-md"
+                />
               </div>
-              <span className="font-display font-semibold tracking-tight text-xl text-primary hidden sm:block">
-                Central Lucenera
-              </span>
             </div>
 
             <div className="flex items-center gap-2">
