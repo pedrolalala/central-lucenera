@@ -73,11 +73,10 @@ export default function Index() {
             />
           </button>
         </div>
-          <h1 className="text-2xl font-display font-medium tracking-tight text-foreground/90">
-            Central de Sistemas
-          </h1>
-          <p className="text-muted-foreground mt-2 text-sm">Plataforma unificada para gestão</p>
-      </div>
+        <h1 className="text-2xl font-display font-medium tracking-tight text-foreground/90">
+          Central de Sistemas
+        </h1>
+        <p className="text-muted-foreground mt-2 text-sm">Plataforma unificada para gestão</p>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
