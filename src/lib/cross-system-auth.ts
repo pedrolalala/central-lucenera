@@ -19,25 +19,21 @@ export async function redirectWithCode(
   redirectTo = '/',
   sistemaDestino?: string,
 ) {
-  try {
-    const destination = new URL(destinationBaseUrl, window.location.href)
-    const redirectPath = safeRedirectPath(redirectTo)
-    const { data, error } = await supabase.functions.invoke('generate-cross-system-code', {
-      body: {
-        sistema_origem: 'hub',
-        sistema_destino: sistemaDestino || destination.hostname,
-        redirect_to: redirectPath,
-      },
-    })
+  const destination = new URL(destinationBaseUrl, window.location.href)
+  const redirectPath = safeRedirectPath(redirectTo)
+  const { data, error } = await supabase.functions.invoke('generate-cross-system-code', {
+    body: {
+      sistema_origem: 'hub',
+      sistema_destino: sistemaDestino || destination.hostname,
+      redirect_to: redirectPath,
+    },
+  })
 
-    if (error) throw error
-    if (!data?.code) throw new Error('Código SSO não retornado.')
+  if (error) throw error
+  if (!data?.code) throw new Error('Código SSO não retornado.')
 
-    const nextUrl = destinationWithCode(destination.toString(), data.code)
-    window.location.href = nextUrl
-  } catch (error) {
-    throw error
-  }
+  const nextUrl = destinationWithCode(destination.toString(), data.code)
+  window.location.href = nextUrl
 }
 
 export async function consumeCodeFromUrl(sistemaDestino?: string): Promise<boolean> {
