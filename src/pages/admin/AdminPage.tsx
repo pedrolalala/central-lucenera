@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { supabase } from '@/lib/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ShieldAlert, UserCog, Activity } from 'lucide-react'
+import { ShieldAlert, UserCog, Activity, KeySquare, UserX2 } from 'lucide-react'
 import { UsersTab } from './components/UsersTab'
 import { AccessTab } from './components/AccessTab'
 import { LogsTab } from './components/LogsTab'
+import { RolesTab } from './components/RolesTab'
+import { ExceptionsTab } from './components/ExceptionsTab'
+import { AuditTab } from './components/AuditTab'
 
 export default function AdminPage() {
   const { profile, loading } = useAuth()
@@ -61,11 +64,32 @@ export default function AdminPage() {
             Matriz de Acesso
           </TabsTrigger>
           <TabsTrigger
+            value="roles"
+            className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
+          >
+            <KeySquare className="w-4 h-4 mr-2.5" />
+            Papéis
+          </TabsTrigger>
+          <TabsTrigger
+            value="exceptions"
+            className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
+          >
+            <UserX2 className="w-4 h-4 mr-2.5" />
+            Exceções
+          </TabsTrigger>
+          <TabsTrigger
             value="logs"
             className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
           >
             <Activity className="w-4 h-4 mr-2.5" />
             Auditoria
+          </TabsTrigger>
+          <TabsTrigger
+            value="permission-audit"
+            className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
+          >
+            <Activity className="w-4 h-4 mr-2.5" />
+            Auditoria de Permissões
           </TabsTrigger>
         </TabsList>
 
@@ -80,8 +104,26 @@ export default function AdminPage() {
           <AccessTab users={users} />
         </TabsContent>
 
+        <TabsContent value="roles" className="focus-visible:outline-none focus-visible:ring-0">
+          <RolesTab />
+        </TabsContent>
+
+        <TabsContent
+          value="exceptions"
+          className="focus-visible:outline-none focus-visible:ring-0"
+        >
+          <ExceptionsTab users={users} />
+        </TabsContent>
+
         <TabsContent value="logs" className="focus-visible:outline-none focus-visible:ring-0">
           <LogsTab users={users} />
+        </TabsContent>
+
+        <TabsContent
+          value="permission-audit"
+          className="focus-visible:outline-none focus-visible:ring-0"
+        >
+          <AuditTab users={users} />
         </TabsContent>
       </Tabs>
     </div>

@@ -7,66 +7,74 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 
+interface Papel {
+  id: string
+  nome: string
+  descricao: string | null
+}
+
 export function AccessTab({ users }: { users: any[] }) {
   const [selectedUserId, setSelectedUserId] = useState<string>('')
-  const [systems, setSystems] = useState<any[]>([])
-  const [userAccess, setUserAccess] = useState<Record<string, boolean>>({})
+  const [papeis, setPapeis] = useState<Papel[]>([])
+  const [userPapeis, setUserPapeis] = useState<Record<string, boolean>>({})
   const { toast } = useToast()
 
   useEffect(() => {
     supabase
-      .from('systems')
-      .select('*')
-      .order('display_order')
-      .then(({ data }) => setSystems(data || []))
+      .from('papeis')
+      .select('id, nome, descricao')
+      .order('nome')
+      .then(({ data }) => setPapeis(data || []))
   }, [])
 
   useEffect(() => {
     if (!selectedUserId) {
-      setUserAccess({})
+      setUserPapeis({})
       return
     }
 
     supabase
-      .from('user_system_access')
-      .select('system_id')
-      .eq('user_id', selectedUserId)
+      .from('usuario_papeis')
+      .select('papel_id')
+      .eq('usuario_id', selectedUserId)
       .then(({ data }) => {
-        const accessMap: Record<string, boolean> = {}
+        const map: Record<string, boolean> = {}
         data?.forEach((row) => {
-          accessMap[row.system_id] = true
+          map[row.papel_id] = true
         })
-        setUserAccess(accessMap)
+        setUserPapeis(map)
       })
   }, [selectedUserId])
 
-  const toggleAccess = async (systemId: string, currentVal: boolean) => {
+  const togglePapel = async (papelId: string, currentVal: boolean) => {
     const newVal = !currentVal
-    setUserAccess((prev) => ({ ...prev, [systemId]: newVal }))
+    setUserPapeis((prev) => ({ ...prev, [papelId]: newVal }))
 
     if (newVal) {
       const { error } = await supabase
-        .from('user_system_access')
-        .insert({ user_id: selectedUserId, system_id: systemId })
+        .from('usuario_papeis')
+        .insert({ usuario_id: selectedUserId, papel_id: papelId })
       if (error) {
-        toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao conceder acesso' })
+        setUserPapeis((prev) => ({ ...prev, [papelId]: currentVal }))
+        toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao atribuir papel' })
       } else {
-        toast({ title: 'Sucesso', description: 'Acesso concedido com sucesso' })
+        toast({ title: 'Sucesso', description: 'Papel atribuído com sucesso' })
       }
     } else {
       const { error } = await supabase
-        .from('user_system_access')
+        .from('usuario_papeis')
         .delete()
-        .match({ user_id: selectedUserId, system_id: systemId })
+        .match({ usuario_id: selectedUserId, papel_id: papelId })
       if (error) {
-        toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao remover acesso' })
+        setUserPapeis((prev) => ({ ...prev, [papelId]: currentVal }))
+        toast({ title: 'Erro', variant: 'destructive', description: 'Falha ao remover papel' })
       } else {
-        toast({ title: 'Sucesso', description: 'Acesso removido com sucesso' })
+        toast({ title: 'Sucesso', description: 'Papel removido com sucesso' })
       }
     }
   }
@@ -96,7 +104,7 @@ export function AccessTab({ users }: { users: any[] }) {
 
         {selectedUser && (
           <div className="pt-2 border-t border-border/50 flex items-center justify-between text-sm">
-            <span className="text-muted-foreground">Papel atual:</span>
+            <span className="text-muted-foreground">Papel legado (usuarios.role):</span>
             <Badge variant="outline" className="bg-primary/5 text-primary border-primary/20">
               {selectedUser.role}
             </Badge>
@@ -105,35 +113,42 @@ export function AccessTab({ users }: { users: any[] }) {
       </div>
 
       {selectedUserId ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {systems.map((sys) => (
-            <Card
-              key={sys.id}
-              className={`transition-all duration-200 border ${userAccess[sys.id] ? 'border-primary/50 shadow-[0_0_15px_rgba(245,158,11,0.05)]' : 'border-border opacity-70 hover:opacity-100'}`}
-            >
-              <CardContent className="p-5 flex items-center justify-between gap-4 h-full">
-                <div className="flex-1 min-w-0">
-                  <h4
-                    className={`font-medium text-base truncate ${userAccess[sys.id] ? 'text-primary' : 'text-foreground'}`}
-                  >
-                    {sys.name}
-                  </h4>
-                  <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
-                    {sys.description}
-                  </p>
-                </div>
-                <Switch
-                  checked={!!userAccess[sys.id]}
-                  onCheckedChange={() => toggleAccess(sys.id, !!userAccess[sys.id])}
-                  className="data-[state=checked]:bg-primary"
-                />
-              </CardContent>
-            </Card>
-          ))}
+        <div className="space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Papéis atribuídos definem visibilidade e ações por sistema. Configure o que cada papel
+            pode fazer na aba "Papéis".
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {papeis.map((papel) => (
+              <Card
+                key={papel.id}
+                className={`transition-all duration-200 border ${userPapeis[papel.id] ? 'border-primary/50 shadow-[0_0_15px_rgba(245,158,11,0.05)]' : 'border-border opacity-70 hover:opacity-100'}`}
+              >
+                <CardContent className="p-5 flex items-center justify-between gap-4 h-full">
+                  <div className="flex-1 min-w-0">
+                    <h4
+                      className={`font-medium text-base capitalize truncate ${userPapeis[papel.id] ? 'text-primary' : 'text-foreground'}`}
+                    >
+                      {papel.nome}
+                    </h4>
+                    {papel.descricao && (
+                      <p className="text-xs text-muted-foreground line-clamp-2 mt-1 leading-relaxed">
+                        {papel.descricao}
+                      </p>
+                    )}
+                  </div>
+                  <Checkbox
+                    checked={!!userPapeis[papel.id]}
+                    onCheckedChange={() => togglePapel(papel.id, !!userPapeis[papel.id])}
+                  />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       ) : (
         <div className="text-center py-16 px-4 border border-dashed border-border rounded-xl text-muted-foreground bg-card/30">
-          Selecione um usuário acima para configurar os sistemas que ele pode acessar.
+          Selecione um usuário acima para configurar os papéis que ele possui.
         </div>
       )}
     </div>

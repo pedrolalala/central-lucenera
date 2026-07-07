@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { SystemCard } from '@/components/SystemCard'
 import { useAuth } from '@/hooks/use-auth'
 import { supabase } from '@/lib/supabase/client'
+import { redirectWithCode } from '@/lib/cross-system-auth'
 import * as Icons from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 
@@ -13,6 +14,7 @@ type System = {
   link: string
   icon_name: string
   display_order: number
+  slug?: string
 }
 
 const getIcon = (iconName: string) => {
@@ -37,13 +39,21 @@ export default function Dashboard() {
       if (!user || !profile) return
 
       setFetching(true)
-      const { data } = await supabase
-        .from('user_system_access')
-        .select('system_id, systems(*)')
-        .eq('user_id', user.id)
+      const { data, error } = await (supabase as any).rpc('hub_sistemas_permitidos', {
+        p_usuario_id: user.id,
+      })
 
-      if (data) {
-        const allowedSystems = data.map((d: any) => d.systems).filter(Boolean)
+      if (!error && data) {
+        const allowedSystems = [...data]
+        allowedSystems.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))
+        setSystems(allowedSystems)
+      } else {
+        const { data: legacyData } = await supabase
+          .from('user_system_access')
+          .select('system_id, systems(*)')
+          .eq('user_id', user.id)
+
+        const allowedSystems = legacyData?.map((d: any) => d.systems).filter(Boolean) || []
         allowedSystems.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))
         setSystems(allowedSystems)
       }
@@ -57,6 +67,14 @@ export default function Dashboard() {
 
   if (loading || (!user && !loading)) {
     return null
+  }
+
+  const openSystem = async (system: System) => {
+    try {
+      await redirectWithCode(system.link, '/', system.slug, { newTab: true })
+    } catch {
+      window.open(system.link, '_blank', 'noopener,noreferrer')
+    }
   }
 
   return (
@@ -95,6 +113,7 @@ export default function Dashboard() {
               description={system.description}
               icon={getIcon(system.icon_name)}
               url={system.link}
+              onOpen={() => void openSystem(system)}
               delay={index * 50}
             />
           ))}
