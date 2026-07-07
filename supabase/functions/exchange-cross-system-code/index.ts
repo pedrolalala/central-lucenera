@@ -61,7 +61,9 @@ Deno.serve(async (req) => {
       query = query.or(`sistema_destino.is.null,sistema_destino.eq.${sistemaDestino}`)
     }
 
-    const { data: codeRow, error: codeError } = await query.select('usuario_id, contexto').single()
+    const { data: codeRow, error: codeError } = await query
+      .select('usuario_id, contexto')
+      .single()
 
     if (codeError || !codeRow) {
       return new Response(JSON.stringify({ error: 'Código expirado, usado ou não autorizado.' }), {
@@ -91,13 +93,10 @@ Deno.serve(async (req) => {
     const tokenHash = linkData?.properties?.hashed_token
 
     if (linkError || !tokenHash) {
-      return new Response(
-        JSON.stringify({ error: linkError?.message ?? 'Falha ao criar sessão.' }),
-        {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          status: 500,
-        },
-      )
+      return new Response(JSON.stringify({ error: linkError?.message ?? 'Falha ao criar sessão.' }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        status: 500,
+      })
     }
 
     const { data: verifyData } = await adminClient.auth.verifyOtp({
@@ -122,12 +121,9 @@ Deno.serve(async (req) => {
       status: 200,
     })
   } catch (error) {
-    return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
-      {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        status: 500,
-      },
-    )
+    return new Response(JSON.stringify({ error: error instanceof Error ? error.message : String(error) }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      status: 500,
+    })
   }
 })
