@@ -105,11 +105,7 @@ export function AuditTab({ users }: { users: any[] }) {
                     <Badge variant="outline">{log.entidade}</Badge>
                   </TableCell>
                   <TableCell className="text-xs text-muted-foreground">
-                    {log.antes && log.depois
-                      ? 'Atualizado'
-                      : log.depois
-                        ? 'Criado'
-                        : 'Removido'}
+                    {log.antes && log.depois ? 'Atualizado' : log.depois ? 'Criado' : 'Removido'}
                   </TableCell>
                 </TableRow>
               ))

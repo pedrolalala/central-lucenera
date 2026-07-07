@@ -108,10 +108,7 @@ export default function AdminPage() {
           <RolesTab />
         </TabsContent>
 
-        <TabsContent
-          value="exceptions"
-          className="focus-visible:outline-none focus-visible:ring-0"
-        >
+        <TabsContent value="exceptions" className="focus-visible:outline-none focus-visible:ring-0">
           <ExceptionsTab users={users} />
         </TabsContent>
 

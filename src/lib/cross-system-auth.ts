@@ -24,7 +24,9 @@ export async function redirectWithCode(
   sistemaDestino?: string,
   options: RedirectOptions = {},
 ) {
-  const placeholder = options.newTab ? window.open('about:blank', '_blank', 'noopener,noreferrer') : null
+  const placeholder = options.newTab
+    ? window.open('about:blank', '_blank', 'noopener,noreferrer')
+    : null
 
   try {
     const destination = new URL(destinationBaseUrl, window.location.href)
