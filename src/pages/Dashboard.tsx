@@ -71,9 +71,9 @@ export default function Dashboard() {
 
   const openSystem = async (system: System) => {
     try {
-      await redirectWithCode(system.link, '/', system.slug, { newTab: true })
+      await redirectWithCode(system.link, '/', system.slug)
     } catch {
-      window.open(system.link, '_blank', 'noopener,noreferrer')
+      window.location.href = system.link
     }
   }
 

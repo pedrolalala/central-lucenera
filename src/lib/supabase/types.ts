@@ -9,6 +9,51 @@ export type Database = {
   }
   public: {
     Tables: {
+      auditoria_permissoes: {
+        Row: {
+          antes: Json | null
+          autor_id: string | null
+          criado_em: string | null
+          depois: Json | null
+          entidade: string
+          entidade_id: string | null
+          id: string
+        }
+        Insert: {
+          antes?: Json | null
+          autor_id?: string | null
+          criado_em?: string | null
+          depois?: Json | null
+          entidade: string
+          entidade_id?: string | null
+          id?: string
+        }
+        Update: {
+          antes?: Json | null
+          autor_id?: string | null
+          criado_em?: string | null
+          depois?: Json | null
+          entidade?: string
+          entidade_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'auditoria_permissoes_autor_id_fkey'
+            columns: ['autor_id']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'auditoria_permissoes_autor_id_fkey'
+            columns: ['autor_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
       boletos: {
         Row: {
           comprovante_url: string | null
@@ -125,6 +170,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'orcamentos'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'boletos_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
           },
           {
             foreignKeyName: 'boletos_parcela_id_fkey'
@@ -676,6 +728,54 @@ export type Database = {
           },
         ]
       }
+      cross_system_session_codes: {
+        Row: {
+          code: string
+          contexto: Json | null
+          criado_em: string
+          expira_em: string
+          sistema_destino: string | null
+          sistema_origem: string
+          usado_em: string | null
+          usuario_id: string
+        }
+        Insert: {
+          code?: string
+          contexto?: Json | null
+          criado_em?: string
+          expira_em?: string
+          sistema_destino?: string | null
+          sistema_origem: string
+          usado_em?: string | null
+          usuario_id: string
+        }
+        Update: {
+          code?: string
+          contexto?: Json | null
+          criado_em?: string
+          expira_em?: string
+          sistema_destino?: string | null
+          sistema_origem?: string
+          usado_em?: string | null
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'cross_system_session_codes_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'cross_system_session_codes_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
       custos_recorrentes: {
         Row: {
           ativo: boolean
@@ -853,6 +953,65 @@ export type Database = {
           nome?: string
         }
         Relationships: []
+      }
+      devolucoes_estoque: {
+        Row: {
+          aprovado_em: string | null
+          aprovado_por: string | null
+          cancelado_em: string | null
+          criado_em: string
+          gera_credito_financeiro: boolean | null
+          id: string
+          motivo: string | null
+          projeto_item_id: string
+          qtd_de_entrega_futura: number
+          qtd_de_entregue: number
+          qtd_de_reserva: number
+          quantidade: number
+          solicitado_por: string | null
+          status: string
+        }
+        Insert: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cancelado_em?: string | null
+          criado_em?: string
+          gera_credito_financeiro?: boolean | null
+          id?: string
+          motivo?: string | null
+          projeto_item_id: string
+          qtd_de_entrega_futura?: number
+          qtd_de_entregue?: number
+          qtd_de_reserva?: number
+          quantidade: number
+          solicitado_por?: string | null
+          status?: string
+        }
+        Update: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cancelado_em?: string | null
+          criado_em?: string
+          gera_credito_financeiro?: boolean | null
+          id?: string
+          motivo?: string | null
+          projeto_item_id?: string
+          qtd_de_entrega_futura?: number
+          qtd_de_entregue?: number
+          qtd_de_reserva?: number
+          quantidade?: number
+          solicitado_por?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'devolucoes_estoque_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+        ]
       }
       empresa_ubiqua: {
         Row: {
@@ -1310,6 +1469,110 @@ export type Database = {
           },
         ]
       }
+      estoque_movimentos_projeto_item: {
+        Row: {
+          criado_em: string
+          criado_por: string | null
+          id: string
+          observacao: string | null
+          origem: string | null
+          projeto_item_destino_id: string | null
+          projeto_item_id: string
+          quantidade: number
+          referencia_id: string | null
+          tipo: string
+        }
+        Insert: {
+          criado_em?: string
+          criado_por?: string | null
+          id?: string
+          observacao?: string | null
+          origem?: string | null
+          projeto_item_destino_id?: string | null
+          projeto_item_id: string
+          quantidade: number
+          referencia_id?: string | null
+          tipo: string
+        }
+        Update: {
+          criado_em?: string
+          criado_por?: string | null
+          id?: string
+          observacao?: string | null
+          origem?: string | null
+          projeto_item_destino_id?: string | null
+          projeto_item_id?: string
+          quantidade?: number
+          referencia_id?: string | null
+          tipo?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_movimentos_projeto_item_projeto_item_destino_id_fkey'
+            columns: ['projeto_item_destino_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'estoque_movimentos_projeto_item_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      estoque_saldos_projeto_item: {
+        Row: {
+          atualizado_em: string
+          criado_em: string
+          projeto_item_id: string
+          q_ag_separar: number
+          q_devolvida: number
+          q_entrega_futura: number
+          q_entregue: number
+          q_reserva: number
+          q_separado: number
+          q_transferida_saida: number
+          status_operacional: string
+        }
+        Insert: {
+          atualizado_em?: string
+          criado_em?: string
+          projeto_item_id: string
+          q_ag_separar?: number
+          q_devolvida?: number
+          q_entrega_futura?: number
+          q_entregue?: number
+          q_reserva?: number
+          q_separado?: number
+          q_transferida_saida?: number
+          status_operacional?: string
+        }
+        Update: {
+          atualizado_em?: string
+          criado_em?: string
+          projeto_item_id?: string
+          q_ag_separar?: number
+          q_devolvida?: number
+          q_entrega_futura?: number
+          q_entregue?: number
+          q_reserva?: number
+          q_separado?: number
+          q_transferida_saida?: number
+          status_operacional?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_saldos_projeto_item_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: true
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       ferias: {
         Row: {
           aprovado_por: string | null
@@ -1638,6 +1901,7 @@ export type Database = {
           data_demissao: string | null
           data_elegibilidade_ferias: string | null
           departamento_id: string | null
+          email: string | null
           empresa: string | null
           empresa_id: string | null
           id: string
@@ -1656,6 +1920,7 @@ export type Database = {
           data_demissao?: string | null
           data_elegibilidade_ferias?: string | null
           departamento_id?: string | null
+          email?: string | null
           empresa?: string | null
           empresa_id?: string | null
           id?: string
@@ -1674,6 +1939,7 @@ export type Database = {
           data_demissao?: string | null
           data_elegibilidade_ferias?: string | null
           departamento_id?: string | null
+          email?: string | null
           empresa?: string | null
           empresa_id?: string | null
           id?: string
@@ -1977,6 +2243,13 @@ export type Database = {
             referencedRelation: 'orcamentos'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'historico_status_orcamentos_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
         ]
       }
       informacoes_cliente_ubiqua: {
@@ -2161,6 +2434,67 @@ export type Database = {
           nome?: string
         }
         Relationships: []
+      }
+      modulo_acoes: {
+        Row: {
+          chave: string
+          id: string
+          modulo_id: string
+        }
+        Insert: {
+          chave: string
+          id?: string
+          modulo_id: string
+        }
+        Update: {
+          chave?: string
+          id?: string
+          modulo_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'modulo_acoes_modulo_id_fkey'
+            columns: ['modulo_id']
+            isOneToOne: false
+            referencedRelation: 'modulos'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      modulos: {
+        Row: {
+          chave: string
+          descricao: string | null
+          id: string
+          nome: string
+          ordem: number | null
+          system_id: string
+        }
+        Insert: {
+          chave: string
+          descricao?: string | null
+          id?: string
+          nome: string
+          ordem?: number | null
+          system_id: string
+        }
+        Update: {
+          chave?: string
+          descricao?: string | null
+          id?: string
+          nome?: string
+          ordem?: number | null
+          system_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'modulos_system_id_fkey'
+            columns: ['system_id']
+            isOneToOne: false
+            referencedRelation: 'systems'
+            referencedColumns: ['id']
+          },
+        ]
       }
       negociacoes: {
         Row: {
@@ -2433,6 +2767,13 @@ export type Database = {
             referencedRelation: 'orcamentos'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'notas_fiscais_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
         ]
       }
       orcamento_itens: {
@@ -2445,6 +2786,7 @@ export type Database = {
           item_pai_id: string | null
           orcamento_id: string
           ordem: number | null
+          peca_nova: boolean | null
           preco_unitario: number | null
           produto_id: string | null
           quantidade: number | null
@@ -2459,6 +2801,7 @@ export type Database = {
           item_pai_id?: string | null
           orcamento_id: string
           ordem?: number | null
+          peca_nova?: boolean | null
           preco_unitario?: number | null
           produto_id?: string | null
           quantidade?: number | null
@@ -2473,6 +2816,7 @@ export type Database = {
           item_pai_id?: string | null
           orcamento_id?: string
           ordem?: number | null
+          peca_nova?: boolean | null
           preco_unitario?: number | null
           produto_id?: string | null
           quantidade?: number | null
@@ -2492,6 +2836,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'orcamentos'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamento_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
           },
           {
             foreignKeyName: 'orcamento_itens_produto_id_fkey'
@@ -2532,6 +2883,7 @@ export type Database = {
       }
       orcamentos: {
         Row: {
+          aprovado_cliente_em: string | null
           arquiteto_id: string | null
           cliente_id: string | null
           condicoes_pagamento: string | null
@@ -2540,22 +2892,29 @@ export type Database = {
           data_emissao: string | null
           desconto_global: number | null
           empresa_id: string
+          enviado_cliente_em: string | null
+          enviado_cliente_por: string | null
           forma_pagamento: Database['public']['Enums']['pagamento_forma'] | null
           frete_tipo: string | null
           frete_valor: number | null
           id: string
           informacoes_cliente_id: string | null
+          motivo_recusa_cliente: string | null
           numero: string | null
           observacoes: string | null
           prazo_inicio_cobranca_dias: number | null
           prazo_pagamento_dias: number[] | null
           projeto_id: string | null
+          recusado_cliente_em: string | null
+          requer_revisao_financeira: boolean | null
           status: string | null
+          token_aprovacao_cliente: string | null
           validade: string | null
           valor_total: number | null
           vendedor_id: string | null
         }
         Insert: {
+          aprovado_cliente_em?: string | null
           arquiteto_id?: string | null
           cliente_id?: string | null
           condicoes_pagamento?: string | null
@@ -2564,22 +2923,29 @@ export type Database = {
           data_emissao?: string | null
           desconto_global?: number | null
           empresa_id: string
+          enviado_cliente_em?: string | null
+          enviado_cliente_por?: string | null
           forma_pagamento?: Database['public']['Enums']['pagamento_forma'] | null
           frete_tipo?: string | null
           frete_valor?: number | null
           id?: string
           informacoes_cliente_id?: string | null
+          motivo_recusa_cliente?: string | null
           numero?: string | null
           observacoes?: string | null
           prazo_inicio_cobranca_dias?: number | null
           prazo_pagamento_dias?: number[] | null
           projeto_id?: string | null
+          recusado_cliente_em?: string | null
+          requer_revisao_financeira?: boolean | null
           status?: string | null
+          token_aprovacao_cliente?: string | null
           validade?: string | null
           valor_total?: number | null
           vendedor_id?: string | null
         }
         Update: {
+          aprovado_cliente_em?: string | null
           arquiteto_id?: string | null
           cliente_id?: string | null
           condicoes_pagamento?: string | null
@@ -2588,17 +2954,23 @@ export type Database = {
           data_emissao?: string | null
           desconto_global?: number | null
           empresa_id?: string
+          enviado_cliente_em?: string | null
+          enviado_cliente_por?: string | null
           forma_pagamento?: Database['public']['Enums']['pagamento_forma'] | null
           frete_tipo?: string | null
           frete_valor?: number | null
           id?: string
           informacoes_cliente_id?: string | null
+          motivo_recusa_cliente?: string | null
           numero?: string | null
           observacoes?: string | null
           prazo_inicio_cobranca_dias?: number | null
           prazo_pagamento_dias?: number[] | null
           projeto_id?: string | null
+          recusado_cliente_em?: string | null
+          requer_revisao_financeira?: boolean | null
           status?: string | null
+          token_aprovacao_cliente?: string | null
           validade?: string | null
           valor_total?: number | null
           vendedor_id?: string | null
@@ -2859,6 +3231,73 @@ export type Database = {
             columns: ['cliente_id']
             isOneToOne: false
             referencedRelation: 'informacoes_cliente_ubiqua'
+            referencedColumns: ['id']
+          },
+        ]
+      }
+      papeis: {
+        Row: {
+          criado_em: string | null
+          descricao: string | null
+          id: string
+          nome: string
+        }
+        Insert: {
+          criado_em?: string | null
+          descricao?: string | null
+          id?: string
+          nome: string
+        }
+        Update: {
+          criado_em?: string | null
+          descricao?: string | null
+          id?: string
+          nome?: string
+        }
+        Relationships: []
+      }
+      papel_permissoes: {
+        Row: {
+          acao: string | null
+          id: string
+          modulo_id: string | null
+          papel_id: string
+          system_id: string
+        }
+        Insert: {
+          acao?: string | null
+          id?: string
+          modulo_id?: string | null
+          papel_id: string
+          system_id: string
+        }
+        Update: {
+          acao?: string | null
+          id?: string
+          modulo_id?: string | null
+          papel_id?: string
+          system_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'papel_permissoes_modulo_id_fkey'
+            columns: ['modulo_id']
+            isOneToOne: false
+            referencedRelation: 'modulos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'papel_permissoes_papel_id_fkey'
+            columns: ['papel_id']
+            isOneToOne: false
+            referencedRelation: 'papeis'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'papel_permissoes_system_id_fkey'
+            columns: ['system_id']
+            isOneToOne: false
+            referencedRelation: 'systems'
             referencedColumns: ['id']
           },
         ]
@@ -3212,6 +3651,13 @@ export type Database = {
             referencedColumns: ['id']
           },
           {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
+          {
             foreignKeyName: 'projeto_itens_produto_id_fkey'
             columns: ['produto_id']
             isOneToOne: false
@@ -3389,6 +3835,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'orcamentos'
             referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_parcelas_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
           },
           {
             foreignKeyName: 'projeto_parcelas_projeto_id_fkey'
@@ -4264,6 +4717,151 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'vw_remessas_completa'
             referencedColumns: ['fornecedor_id']
+          },
+        ]
+      }
+      retorno_bancario_arquivos: {
+        Row: {
+          conta: string | null
+          forcado: boolean
+          hash_conteudo: string
+          id: string
+          nome_arquivo: string
+          processado_em: string
+          processado_por: string | null
+          total_aplicados: number
+          total_divergentes: number
+          total_nao_encontrados: number
+          total_registros: number
+        }
+        Insert: {
+          conta?: string | null
+          forcado?: boolean
+          hash_conteudo: string
+          id?: string
+          nome_arquivo: string
+          processado_em?: string
+          processado_por?: string | null
+          total_aplicados?: number
+          total_divergentes?: number
+          total_nao_encontrados?: number
+          total_registros?: number
+        }
+        Update: {
+          conta?: string | null
+          forcado?: boolean
+          hash_conteudo?: string
+          id?: string
+          nome_arquivo?: string
+          processado_em?: string
+          processado_por?: string | null
+          total_aplicados?: number
+          total_divergentes?: number
+          total_nao_encontrados?: number
+          total_registros?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'retorno_bancario_arquivos_processado_por_fkey'
+            columns: ['processado_por']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_arquivos_processado_por_fkey'
+            columns: ['processado_por']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
+      retorno_bancario_registros: {
+        Row: {
+          arquivo_id: string
+          boleto_id: string | null
+          data_pagamento: string | null
+          id: string
+          motivo_divergencia: string | null
+          nosso_numero: string
+          ocorrencia_codigo: string | null
+          parcela_id: string | null
+          status_aplicacao: string
+          transacao_id: string | null
+          valor_esperado: number | null
+          valor_recebido: number | null
+        }
+        Insert: {
+          arquivo_id: string
+          boleto_id?: string | null
+          data_pagamento?: string | null
+          id?: string
+          motivo_divergencia?: string | null
+          nosso_numero: string
+          ocorrencia_codigo?: string | null
+          parcela_id?: string | null
+          status_aplicacao: string
+          transacao_id?: string | null
+          valor_esperado?: number | null
+          valor_recebido?: number | null
+        }
+        Update: {
+          arquivo_id?: string
+          boleto_id?: string | null
+          data_pagamento?: string | null
+          id?: string
+          motivo_divergencia?: string | null
+          nosso_numero?: string
+          ocorrencia_codigo?: string | null
+          parcela_id?: string | null
+          status_aplicacao?: string
+          transacao_id?: string | null
+          valor_esperado?: number | null
+          valor_recebido?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'retorno_bancario_registros_arquivo_id_fkey'
+            columns: ['arquivo_id']
+            isOneToOne: false
+            referencedRelation: 'retorno_bancario_arquivos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_registros_boleto_id_fkey'
+            columns: ['boleto_id']
+            isOneToOne: false
+            referencedRelation: 'boletos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_registros_parcela_id_fkey'
+            columns: ['parcela_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_parcelas'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_registros_parcela_id_fkey'
+            columns: ['parcela_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['parcela_crm_id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_registros_transacao_id_fkey'
+            columns: ['transacao_id']
+            isOneToOne: false
+            referencedRelation: 'transacoes'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'retorno_bancario_registros_transacao_id_fkey'
+            columns: ['transacao_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['id']
           },
         ]
       }
@@ -5610,6 +6208,8 @@ export type Database = {
           id: string
           link: string
           name: string
+          slug: string
+          visivel_no_hub: boolean
         }
         Insert: {
           description: string
@@ -5618,6 +6218,8 @@ export type Database = {
           id?: string
           link: string
           name: string
+          slug: string
+          visivel_no_hub?: boolean
         }
         Update: {
           description?: string
@@ -5626,6 +6228,8 @@ export type Database = {
           id?: string
           link?: string
           name?: string
+          slug?: string
+          visivel_no_hub?: boolean
         }
         Relationships: []
       }
@@ -5634,6 +6238,7 @@ export type Database = {
           acordo: number | null
           categoria_id: string | null
           cod_itens_duplicata: number | null
+          cod_venda: number | null
           comprovante_url: string | null
           conta_id: string | null
           created_at: string
@@ -5665,6 +6270,7 @@ export type Database = {
           acordo?: number | null
           categoria_id?: string | null
           cod_itens_duplicata?: number | null
+          cod_venda?: number | null
           comprovante_url?: string | null
           conta_id?: string | null
           created_at?: string
@@ -5696,6 +6302,7 @@ export type Database = {
           acordo?: number | null
           categoria_id?: string | null
           cod_itens_duplicata?: number | null
+          cod_venda?: number | null
           comprovante_url?: string | null
           conta_id?: string | null
           created_at?: string
@@ -5915,6 +6522,66 @@ export type Database = {
           },
         ]
       }
+      transferencias_estoque: {
+        Row: {
+          aprovado_em: string | null
+          aprovado_por: string | null
+          cancelado_em: string | null
+          destino_projeto_item_id: string
+          id: string
+          motivo: string | null
+          motivo_cancelamento: string | null
+          origem_projeto_item_id: string
+          quantidade: number
+          solicitado_em: string
+          solicitado_por: string | null
+          status: string
+        }
+        Insert: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cancelado_em?: string | null
+          destino_projeto_item_id: string
+          id?: string
+          motivo?: string | null
+          motivo_cancelamento?: string | null
+          origem_projeto_item_id: string
+          quantidade: number
+          solicitado_em?: string
+          solicitado_por?: string | null
+          status?: string
+        }
+        Update: {
+          aprovado_em?: string | null
+          aprovado_por?: string | null
+          cancelado_em?: string | null
+          destino_projeto_item_id?: string
+          id?: string
+          motivo?: string | null
+          motivo_cancelamento?: string | null
+          origem_projeto_item_id?: string
+          quantidade?: number
+          solicitado_em?: string
+          solicitado_por?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'transferencias_estoque_destino_projeto_item_id_fkey'
+            columns: ['destino_projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'transferencias_estoque_origem_projeto_item_id_fkey'
+            columns: ['origem_projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       user_roles_separacao: {
         Row: {
           created_at: string | null
@@ -5991,10 +6658,130 @@ export type Database = {
           },
         ]
       }
+      usuario_papeis: {
+        Row: {
+          papel_id: string
+          usuario_id: string
+        }
+        Insert: {
+          papel_id: string
+          usuario_id: string
+        }
+        Update: {
+          papel_id?: string
+          usuario_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'usuario_papeis_papel_id_fkey'
+            columns: ['papel_id']
+            isOneToOne: false
+            referencedRelation: 'papeis'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_papeis_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_papeis_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
+      usuario_permissao_excecoes: {
+        Row: {
+          acao: string
+          criado_em: string | null
+          criado_por: string | null
+          id: string
+          justificativa: string | null
+          modulo_id: string | null
+          system_id: string
+          tipo: string
+          usuario_id: string
+          valido_até: string | null
+        }
+        Insert: {
+          acao: string
+          criado_em?: string | null
+          criado_por?: string | null
+          id?: string
+          justificativa?: string | null
+          modulo_id?: string | null
+          system_id: string
+          tipo: string
+          usuario_id: string
+          valido_até?: string | null
+        }
+        Update: {
+          acao?: string
+          criado_em?: string | null
+          criado_por?: string | null
+          id?: string
+          justificativa?: string | null
+          modulo_id?: string | null
+          system_id?: string
+          tipo?: string
+          usuario_id?: string
+          valido_até?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_criado_por_fkey'
+            columns: ['criado_por']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_criado_por_fkey'
+            columns: ['criado_por']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_modulo_id_fkey'
+            columns: ['modulo_id']
+            isOneToOne: false
+            referencedRelation: 'modulos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_system_id_fkey'
+            columns: ['system_id']
+            isOneToOne: false
+            referencedRelation: 'systems'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'usuarios'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'usuario_permissao_excecoes_usuario_id_fkey'
+            columns: ['usuario_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_por_responsavel'
+            referencedColumns: ['usuario_id']
+          },
+        ]
+      }
       usuarios: {
         Row: {
           ativo: boolean | null
           avatar_url: string | null
+          can_approve_quotes: boolean | null
           created_at: string | null
           email: string
           empresa_id: string | null
@@ -6008,6 +6795,7 @@ export type Database = {
         Insert: {
           ativo?: boolean | null
           avatar_url?: string | null
+          can_approve_quotes?: boolean | null
           created_at?: string | null
           email: string
           empresa_id?: string | null
@@ -6021,6 +6809,7 @@ export type Database = {
         Update: {
           ativo?: boolean | null
           avatar_url?: string | null
+          can_approve_quotes?: boolean | null
           created_at?: string | null
           email?: string
           empresa_id?: string | null
@@ -6476,6 +7265,153 @@ export type Database = {
           },
         ]
       }
+      vw_entrega_futura_projeto_item: {
+        Row: {
+          atualizado_em: string | null
+          cliente: string | null
+          cliente_id: string | null
+          orcamento_id: string | null
+          orcamento_numero: string | null
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          projeto_codigo: string | null
+          projeto_id: string | null
+          projeto_item_id: string | null
+          q_entrega_futura: number | null
+          q_reserva: number | null
+          q_transferida_saida: number | null
+          q_venda: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_saldos_projeto_item_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: true
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'orcamentos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'produtos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_financeiro_projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_dashboard'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_pipeline'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_resumo'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_empresa'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_responsavel'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_separacoes_agenda'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['projeto_id']
+          },
+        ]
+      }
       vw_estoque_liquido: {
         Row: {
           alerta_estoque: string | null
@@ -6506,6 +7442,157 @@ export type Database = {
         }
         Relationships: []
       }
+      vw_estoque_por_produto_projeto: {
+        Row: {
+          atualizado_em: string | null
+          cliente_id: string | null
+          orcamento_id: string | null
+          orcamento_numero: string | null
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          projeto_codigo: string | null
+          projeto_id: string | null
+          projeto_item_id: string | null
+          q_ag_separar: number | null
+          q_devolvida: number | null
+          q_entrega_futura: number | null
+          q_entregue: number | null
+          q_reserva: number | null
+          q_separado: number | null
+          q_transferida_saida: number | null
+          q_venda: number | null
+          status_operacional: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_saldos_projeto_item_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: true
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'orcamentos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'produtos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_financeiro_projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_dashboard'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_pipeline'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_resumo'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_empresa'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_responsavel'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_separacoes_agenda'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['projeto_id']
+          },
+        ]
+      }
       vw_estoque_produtos: {
         Row: {
           categoria: string | null
@@ -6520,6 +7607,205 @@ export type Database = {
           valor_venda: number | null
         }
         Relationships: []
+      }
+      vw_estoque_resumo: {
+        Row: {
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          qtd_comprometida: number | null
+          qtd_disponivel: number | null
+          qtd_entrega_futura: number | null
+          qtd_total: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'produtos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'estoque_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'estoque_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'estoque_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'estoque_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+        ]
+      }
+      vw_estoque_saldos_projeto_item: {
+        Row: {
+          atualizado_em: string | null
+          cliente_id: string | null
+          orcamento_id: string | null
+          orcamento_numero: string | null
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          projeto_codigo: string | null
+          projeto_id: string | null
+          projeto_item_id: string | null
+          q_ag_separar: number | null
+          q_devolvida: number | null
+          q_entrega_futura: number | null
+          q_entregue: number | null
+          q_reserva: number | null
+          q_separado: number | null
+          q_transferida_saida: number | null
+          q_venda: number | null
+          status_operacional: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'estoque_saldos_projeto_item_projeto_item_id_fkey'
+            columns: ['projeto_item_id']
+            isOneToOne: true
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'orcamentos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_orcamento_id_fkey'
+            columns: ['orcamento_id']
+            isOneToOne: false
+            referencedRelation: 'vw_orcamentos_aprovacao_financeira_auditoria'
+            referencedColumns: ['orcamento_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'produtos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_financeiro_projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_dashboard'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_pipeline'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_resumo'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_empresa'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_responsavel'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_separacoes_agenda'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['projeto_id']
+          },
+        ]
       }
       vw_financeiro_projetos: {
         Row: {
@@ -6644,61 +7930,170 @@ export type Database = {
         }
         Relationships: []
       }
-      vw_produtos_estoque_detalhado: {
+      vw_necessidade_compra: {
         Row: {
-          ativo: boolean | null
-          categoria: string | null
-          categoria_id: string | null
-          codigo_legado: number | null
-          codigo_produto: number | null
-          descricao_tecnica: string | null
-          estoque_disponivel_calc: number | null
-          estoque_reservado_calc: number | null
-          estoque_setores: Json | null
-          estoque_total_calc: number | null
-          fornecedor_principal_id: string | null
-          id: string | null
-          marca_id: string | null
-          ncm: string | null
-          nome: string | null
-          preco_custo: number | null
-          preco_venda: number | null
-          referencia: string | null
-          sku: string | null
-          tipo_fiscal: string | null
-          unidade: string | null
-          valor_venda: number | null
+          necessidade_compra: number | null
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          projetos_com_entrega_futura: number | null
+          qtd_comprometida: number | null
+          qtd_disponivel: number | null
+          qtd_fisica: number | null
         }
         Relationships: [
           {
-            foreignKeyName: 'produtos_categoria_id_fkey'
-            columns: ['categoria_id']
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
             isOneToOne: false
-            referencedRelation: 'categorias_produto'
+            referencedRelation: 'produtos'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'produtos_fornecedor_principal_id_fkey'
-            columns: ['fornecedor_principal_id']
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+        ]
+      }
+      vw_orcamentos_aprovacao_financeira_auditoria: {
+        Row: {
+          aprovado_cliente_em: string | null
+          boletos_por_orcamento: number | null
+          classificacao_fluxo: string | null
+          cliente_id: string | null
+          numero: string | null
+          orcamento_id: string | null
+          parcelas_por_orcamento: number | null
+          projeto_id: string | null
+          projeto_itens_por_orcamento: number | null
+          requer_revisao_financeira: boolean | null
+          status: string | null
+          valor_total: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'orcamentos_cliente_id_fkey'
+            columns: ['cliente_id']
             isOneToOne: false
             referencedRelation: 'contatos'
             referencedColumns: ['id']
           },
           {
-            foreignKeyName: 'produtos_fornecedor_principal_id_fkey'
-            columns: ['fornecedor_principal_id']
+            foreignKeyName: 'orcamentos_cliente_id_fkey'
+            columns: ['cliente_id']
             isOneToOne: false
             referencedRelation: 'vw_transacoes_completas'
             referencedColumns: ['contato_id']
           },
           {
-            foreignKeyName: 'produtos_marca_id_fkey'
-            columns: ['marca_id']
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
             isOneToOne: false
-            referencedRelation: 'marcas'
+            referencedRelation: 'projetos'
             referencedColumns: ['id']
           },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_financeiro_projetos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_dashboard'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_pipeline'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_resumo'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_empresa'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_projetos_sem_responsavel'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_separacoes_agenda'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_transacoes_completas'
+            referencedColumns: ['projeto_id']
+          },
+          {
+            foreignKeyName: 'orcamentos_projeto_id_fkey'
+            columns: ['projeto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['projeto_id']
+          },
         ]
+      }
+      vw_produtos_estoque_detalhado: {
+        Row: {
+          codigo_produto: number | null
+          disponivel: number | null
+          estoque_geral: number | null
+          id: string | null
+          nome: string | null
+          preco_venda: number | null
+          reserva: number | null
+          separacao: number | null
+          sku: string | null
+        }
+        Relationships: []
       }
       vw_produtos_estoque_por_local: {
         Row: {
@@ -7248,6 +8643,82 @@ export type Database = {
           },
         ]
       }
+      vw_transferencias_estoque: {
+        Row: {
+          aprovado_em: string | null
+          aprovado_por: string | null
+          cancelado_em: string | null
+          destino_cliente: string | null
+          destino_orcamento_numero: string | null
+          destino_projeto_codigo: string | null
+          destino_projeto_item_id: string | null
+          motivo: string | null
+          motivo_cancelamento: string | null
+          origem_cliente: string | null
+          origem_orcamento_numero: string | null
+          origem_projeto_codigo: string | null
+          origem_projeto_item_id: string | null
+          produto: string | null
+          produto_codigo: number | null
+          produto_id: string | null
+          quantidade: number | null
+          solicitado_em: string | null
+          solicitado_por: string | null
+          status: string | null
+          transferencia_id: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'produtos'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_estoque_liquido'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_produtos_estoque_detalhado'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_loja'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'projeto_itens_produto_id_fkey'
+            columns: ['produto_id']
+            isOneToOne: false
+            referencedRelation: 'vw_vendas_por_projeto'
+            referencedColumns: ['produto_id']
+          },
+          {
+            foreignKeyName: 'transferencias_estoque_destino_projeto_item_id_fkey'
+            columns: ['destino_projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+          {
+            foreignKeyName: 'transferencias_estoque_origem_projeto_item_id_fkey'
+            columns: ['origem_projeto_item_id']
+            isOneToOne: false
+            referencedRelation: 'projeto_itens'
+            referencedColumns: ['id']
+          },
+        ]
+      }
       vw_vendas_loja: {
         Row: {
           categoria: string | null
@@ -7317,6 +8788,10 @@ export type Database = {
         }
         Returns: number[]
       }
+      adm_aprovar_pelo_cliente: {
+        Args: { p_observacao?: string; p_orcamento_id: string }
+        Returns: Json
+      }
       admin_update_user_password: {
         Args: { p_new_password: string; p_user_id: string }
         Returns: undefined
@@ -7329,6 +8804,18 @@ export type Database = {
         Args: { p_ativo: boolean; p_user_id: string }
         Returns: undefined
       }
+      aprovar_orcamento_cliente: {
+        Args: { p_orcamento_id: string }
+        Returns: Json
+      }
+      aprovar_orcamento_cliente_manual: {
+        Args: { p_orcamento_id: string }
+        Returns: Json
+      }
+      aprovar_orcamento_cliente_publico: {
+        Args: { p_orcamento_id: string; p_token: string }
+        Returns: Json
+      }
       aprovar_orcamento_financeiro: {
         Args: { p_orcamento_id: string }
         Returns: Json
@@ -7337,6 +8824,32 @@ export type Database = {
         Args: { p_orcamento_id: string }
         Returns: Json
       }
+      aprovar_projeto_financeiro: {
+        Args: { p_project_id: string }
+        Returns: Json
+      }
+      aprovar_transferencia_estoque: {
+        Args: { p_transferencia_id: string }
+        Returns: Json
+      }
+      can_user_approve_quotes: { Args: never; Returns: boolean }
+      cancelar_orcamento: {
+        Args: { p_motivo?: string; p_orcamento_id: string }
+        Returns: Json
+      }
+      cancelar_transferencia_estoque: {
+        Args: { p_motivo?: string; p_transferencia_id: string }
+        Returns: Json
+      }
+      cliente_aprovar_orcamento: {
+        Args: { p_orcamento_id: string; p_token: string }
+        Returns: Json
+      }
+      cliente_recusar_orcamento: {
+        Args: { p_motivo?: string; p_orcamento_id: string; p_token: string }
+        Returns: Json
+      }
+      criar_produto_orcamento: { Args: { p_payload: Json }; Returns: Json }
       criar_usuario: {
         Args: {
           p_email: string
@@ -7346,7 +8859,18 @@ export type Database = {
         }
         Returns: string
       }
+      current_user_funcionario_id: { Args: never; Returns: string }
+      current_user_is_funcionario: { Args: never; Returns: boolean }
+      enviar_orcamento_para_cliente: {
+        Args: { p_orcamento_id: string }
+        Returns: Json
+      }
+      finalizar_validacao_financeira: {
+        Args: { p_orcamentos: Json; p_project_data: Json; p_project_id: string }
+        Returns: Json
+      }
       fn_gerar_numero_orcamento: { Args: never; Returns: string }
+      gen_token_hex: { Args: never; Returns: string }
       generate_product_slug: {
         Args: { nome: string; preco: number }
         Returns: string
@@ -7395,6 +8919,7 @@ export type Database = {
         Returns: number
       }
       get_latest_transaction_id: { Args: never; Returns: string }
+      get_my_funcionario_id: { Args: never; Returns: string }
       get_next_sku: { Args: { prefix: string }; Returns: string }
       get_user_role: { Args: never; Returns: string }
       get_vendedores: {
@@ -7405,9 +8930,69 @@ export type Database = {
           name: string
         }[]
       }
+      hub_pode_executar: {
+        Args: {
+          p_acao: string
+          p_modulo_chave: string
+          p_system_slug: string
+          p_usuario_id: string
+        }
+        Returns: boolean
+      }
+      hub_sistemas_permitidos: {
+        Args: { p_usuario_id: string }
+        Returns: {
+          description: string
+          display_order: number | null
+          icon_name: string | null
+          id: string
+          link: string
+          name: string
+          slug: string
+          visivel_no_hub: boolean
+        }[]
+        SetofOptions: {
+          from: '*'
+          to: 'systems'
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       is_admin: { Args: never; Returns: boolean }
       is_ubiqua_admin: { Args: never; Returns: boolean }
       limpar_staging_processados: { Args: never; Returns: number }
+      link_my_funcionario_record: { Args: never; Returns: undefined }
+      processar_retorno_bancario: {
+        Args: {
+          p_conta: string
+          p_forcar?: boolean
+          p_hash: string
+          p_nome_arquivo: string
+          p_registros: Json
+        }
+        Returns: Json
+      }
+      registrar_devolucao_projeto_item: {
+        Args: {
+          p_motivo?: string
+          p_projeto_item_id: string
+          p_quantidade: number
+        }
+        Returns: Json
+      }
+      replace_orcamento_itens: {
+        Args: { p_items: Json; p_orcamento_id: string }
+        Returns: number
+      }
+      solicitar_transferencia_estoque: {
+        Args: {
+          p_destino_projeto_item_id: string
+          p_motivo?: string
+          p_origem_projeto_item_id: string
+          p_quantidade: number
+        }
+        Returns: Json
+      }
       stats_datacenter: { Args: never; Returns: Json }
       unaccent: { Args: { '': string }; Returns: string }
       update_revenda_ubiqua_ordem: {
@@ -7460,6 +9045,8 @@ export type Database = {
         | 'Contrato de Projeto'
         | 'Ajustes Finais'
         | 'Emissão Projeto Executivo'
+        | 'Aprovação Financeira'
+        | 'Orçamento Aprovado'
       separacao_status:
         | 'Rascunho'
         | 'Pendente'
@@ -7647,6 +9234,8 @@ export const Constants = {
         'Contrato de Projeto',
         'Ajustes Finais',
         'Emissão Projeto Executivo',
+        'Aprovação Financeira',
+        'Orçamento Aprovado',
       ],
       separacao_status: [
         'Rascunho',

@@ -47,8 +47,6 @@ export function SystemCard({
   return (
     <a
       href={url}
-      target="_blank"
-      rel="noopener noreferrer"
       className="block animate-stagger-up group focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 rounded-xl"
       style={{ animationDelay: `${delay}ms` }}
     >
