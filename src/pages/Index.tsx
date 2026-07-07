@@ -49,28 +49,35 @@ export default function Index() {
     <div className="min-h-screen flex items-center justify-center bg-background p-4 relative overflow-hidden">
       <div className="absolute inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-background via-background to-secondary/50" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/5 blur-[120px]" />
       </div>
 
       <div
         className={cn(
-          'w-full max-w-md space-y-8 p-8 md:p-10 bg-card/50 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-10 transition-all duration-300',
+          'w-full max-w-md space-y-8 p-8 md:p-10 bg-card/80 backdrop-blur-xl border border-border rounded-2xl shadow-2xl z-10 transition-all duration-300',
           isExiting ? 'opacity-0 scale-95 translate-y-4' : 'opacity-100 scale-100 translate-y-0',
           'animate-fade-in',
         )}
       >
         <div className="text-center mb-8 flex flex-col items-center">
-          <div className="mb-6 flex justify-center">
+          <button
+            type="button"
+            onClick={() => window.location.reload()}
+            className="mb-6 flex justify-center cursor-pointer transition-transform hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 rounded-lg"
+            aria-label="Recarregar página"
+          >
             <img
               src={logoUrl}
-              alt="Luce Nera Logo"
-              className="h-24 sm:h-28 w-auto object-contain drop-shadow-xl"
+              alt="Luce Nera"
+              className="h-20 sm:h-24 md:h-28 max-w-[220px] w-auto object-contain drop-shadow-2xl"
             />
-          </div>
+          </button>
+        </div>
           <h1 className="text-2xl font-display font-medium tracking-tight text-foreground/90">
             Central de Sistemas
           </h1>
           <p className="text-muted-foreground mt-2 text-sm">Plataforma unificada para gestão</p>
-        </div>
+      </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-2">
