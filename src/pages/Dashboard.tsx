@@ -87,6 +87,7 @@ export default function Dashboard() {
     } catch {
       window.location.href = system.link
     }
+    return
   }
 
   return (
