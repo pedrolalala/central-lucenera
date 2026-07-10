@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { supabase } from '@/lib/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ShieldAlert, UserCog, Activity, KeySquare, UserX2 } from 'lucide-react'
+import { ShieldAlert, UserCog, Activity, KeySquare, UserX2, LayoutGrid } from 'lucide-react'
 import { UsersTab } from './components/UsersTab'
 import { AccessTab } from './components/AccessTab'
 import { LogsTab } from './components/LogsTab'
 import { RolesTab } from './components/RolesTab'
 import { ExceptionsTab } from './components/ExceptionsTab'
 import { AuditTab } from './components/AuditTab'
+import { SystemAccessTab } from './components/SystemAccessTab'
 
 export default function AdminPage() {
   const { profile, loading } = useAuth()
@@ -64,6 +65,13 @@ export default function AdminPage() {
             Matriz de Acesso
           </TabsTrigger>
           <TabsTrigger
+            value="systems-access"
+            className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
+          >
+            <LayoutGrid className="w-4 h-4 mr-2.5" />
+            Acesso a Sistemas
+          </TabsTrigger>
+          <TabsTrigger
             value="roles"
             className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
           >
@@ -102,6 +110,13 @@ export default function AdminPage() {
 
         <TabsContent value="access" className="focus-visible:outline-none focus-visible:ring-0">
           <AccessTab users={users} />
+        </TabsContent>
+
+        <TabsContent
+          value="systems-access"
+          className="bg-card border border-border rounded-xl p-6 shadow-sm focus-visible:outline-none focus-visible:ring-0"
+        >
+          <SystemAccessTab users={users} />
         </TabsContent>
 
         <TabsContent value="roles" className="focus-visible:outline-none focus-visible:ring-0">

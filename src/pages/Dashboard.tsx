@@ -39,11 +39,23 @@ export default function Dashboard() {
       if (!user || !profile) return
 
       setFetching(true)
+
+      if (profile?.role === 'admin') {
+        const { data: allSystems } = await supabase
+          .from('systems')
+          .select('*')
+          .eq('visivel_no_hub', true)
+          .order('display_order')
+        setSystems(allSystems || [])
+        setFetching(false)
+        return
+      }
+
       const { data, error } = await (supabase as any).rpc('hub_sistemas_permitidos', {
         p_usuario_id: user.id,
       })
 
-      if (!error && data) {
+      if (!error && data && data.length > 0) {
         const allowedSystems = [...data]
         allowedSystems.sort((a: any, b: any) => (a.display_order || 0) - (b.display_order || 0))
         setSystems(allowedSystems)
