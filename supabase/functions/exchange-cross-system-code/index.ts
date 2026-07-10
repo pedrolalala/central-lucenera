@@ -92,7 +92,9 @@ Deno.serve(async (req) => {
 
     if (linkError || !tokenHash) {
       return new Response(
-        JSON.stringify({ error: linkError?.message ?? 'Falha ao criar sessão.' }),
+        JSON.stringify({
+          error: linkError?.message ?? 'Falha ao criar sessão.',
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
           status: 500,
@@ -123,7 +125,9 @@ Deno.serve(async (req) => {
     })
   } catch (error) {
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
+      JSON.stringify({
+        error: error instanceof Error ? error.message : String(error),
+      }),
       {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         status: 500,

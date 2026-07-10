@@ -23,7 +23,10 @@ Deno.serve(async (req: Request) => {
 
     if (!boletos || boletos.length === 0) {
       return new Response(
-        JSON.stringify({ message: 'Nenhum boleto pendente de emissão.', processedIds: [] }),
+        JSON.stringify({
+          message: 'Nenhum boleto pendente de emissão.',
+          processedIds: [],
+        }),
         {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         },
@@ -78,9 +81,10 @@ Deno.serve(async (req: Request) => {
         const pdfName = `Faturamento/${currentYear}/NF${numeroNota}.pdf`
 
         const mockPdf = new Uint8Array([37, 80, 68, 70, 45, 10]) // %PDF-\n
-        await supabaseClient.storage
-          .from('notas_fiscais')
-          .upload(pdfName, mockPdf, { contentType: 'application/pdf', upsert: true })
+        await supabaseClient.storage.from('notas_fiscais').upload(pdfName, mockPdf, {
+          contentType: 'application/pdf',
+          upsert: true,
+        })
 
         const { data: publicUrl } = supabaseClient.storage
           .from('notas_fiscais')
