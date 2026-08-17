@@ -34,7 +34,17 @@ export function LogsTab({ users }: { users: any[] }) {
         .limit(100)
 
       if (search) {
-        q = q.ilike('tabela', `%${search}%`)
+        // SPEC-116: multi-termo em qualquer ordem — cada palavra digitada
+        // precisa casar em tabela, operação ou observação (não precisa
+        // ser o mesmo campo). Encadear .or() por termo faz o PostgREST
+        // AND-ar os grupos entre si.
+        search
+          .trim()
+          .split(/\s+/)
+          .filter(Boolean)
+          .forEach((term) => {
+            q = q.or(`tabela.ilike.%${term}%,operacao.ilike.%${term}%,observacao.ilike.%${term}%`)
+          })
       }
 
       const { data } = await q
@@ -66,7 +76,7 @@ export function LogsTab({ users }: { users: any[] }) {
         <div className="relative w-full max-w-sm">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
           <Input
-            placeholder="Filtrar por nome da tabela..."
+            placeholder="Filtrar por tabela, operação ou observação..."
             className="pl-9 bg-background border-border/50"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
