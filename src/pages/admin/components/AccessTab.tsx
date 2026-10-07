@@ -115,8 +115,9 @@ export function AccessTab({ users }: { users: any[] }) {
       {selectedUserId ? (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Papéis atribuídos definem visibilidade e ações por sistema. Configure o que cada papel
-            pode fazer na aba "Papéis".
+            Papéis definem o que a pessoa pode fazer dentro dos sistemas. Quais sistemas ela vê é
+            definido na aba "Acesso a Sistemas". Configure o que cada papel pode fazer na aba
+            "Papéis".
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {papeis.map((papel) => (

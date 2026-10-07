@@ -45,7 +45,7 @@ export default function Dashboard() {
           .from('systems')
           .select('*')
           .eq('visivel_no_hub', true)
-          .order('display_order')
+          .order('display_order', { ascending: true })
         setSystems(allSystems || [])
         setFetching(false)
         return
@@ -81,11 +81,13 @@ export default function Dashboard() {
     return null
   }
 
+  // SPEC-174 N1: card da Central abre o sistema em nova aba; o menu lateral
+  // (SystemSwitcher) continua trocando a própria aba.
   const openSystem = async (system: System) => {
     try {
-      await redirectWithCode(system.link, '/', system.slug)
+      await redirectWithCode(system.link, '/', system.slug, { newTab: true })
     } catch {
-      window.location.href = system.link
+      window.open(system.link, '_blank', 'noopener,noreferrer')
     }
     return
   }

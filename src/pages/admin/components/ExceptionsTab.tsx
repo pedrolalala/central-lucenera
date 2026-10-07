@@ -96,6 +96,10 @@ export function ExceptionsTab({ users }: { users: any[] }) {
     <div className="space-y-8 animate-fade-in">
       <div className="bg-card p-6 rounded-xl border border-border shadow-sm space-y-4">
         <h3 className="font-medium text-foreground">Nova exceção</h3>
+        <p className="text-sm text-muted-foreground">
+          A exceção libera ou nega uma ação para uma pessoa dentro de um sistema. Ela não faz o
+          sistema aparecer: o sistema precisa estar marcado na aba "Acesso a Sistemas".
+        </p>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <Select value={usuarioId} onValueChange={setUsuarioId}>
             <SelectTrigger>

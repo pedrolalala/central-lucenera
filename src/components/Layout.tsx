@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
 import { LogOut, Settings } from 'lucide-react'
 import logoUrl from '@/assets/logotipo-verticalv1branco-0271a.png'
+import { SystemSwitcher } from '@/components/SystemSwitcher'
 
 export default function Layout() {
   const { user, profile, signOut } = useAuth()
@@ -63,6 +64,8 @@ export default function Layout() {
       <main className="flex-1 flex flex-col relative">
         <Outlet />
       </main>
+      {/* SPEC-120: no Hub o menu não mostra link pra si mesmo (showHubLink=false). */}
+      <SystemSwitcher currentSlug="hub" showHubLink={false} />
     </div>
   )
 }

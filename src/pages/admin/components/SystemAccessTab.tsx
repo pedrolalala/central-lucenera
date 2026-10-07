@@ -23,7 +23,11 @@ export function SystemAccessTab({ users }: { users: any[] }) {
   const [selectedUserId, setSelectedUserId] = useState('')
   const [systems, setSystems] = useState<SystemItem[]>([])
   const [userAccess, setUserAccess] = useState<Record<string, boolean>>({})
+  // SPEC-183: sistemas em que algum papel (ou exceção "conceder") do usuário
+  // dá alguma ação — marcado aqui sem isso = vê o cartão mas não age lá dentro.
+  const [comPermissao, setComPermissao] = useState<Record<string, boolean>>({})
   const { toast } = useToast()
+  const selectedUser = users.find((u) => u.id === selectedUserId)
 
   useEffect(() => {
     supabase
@@ -49,6 +53,34 @@ export function SystemAccessTab({ users }: { users: any[] }) {
         })
         setUserAccess(map)
       })
+
+    const carregarPermissoes = async () => {
+      const { data: up } = await supabase
+        .from('usuario_papeis')
+        .select('papel_id')
+        .eq('usuario_id', selectedUserId)
+      const papelIds = (up || []).map((r) => r.papel_id)
+      const map: Record<string, boolean> = {}
+      if (papelIds.length > 0) {
+        const { data: pp } = await supabase
+          .from('papel_permissoes')
+          .select('system_id')
+          .in('papel_id', papelIds)
+        pp?.forEach((r) => {
+          map[r.system_id] = true
+        })
+      }
+      const { data: exc } = await supabase
+        .from('usuario_permissao_excecoes')
+        .select('system_id')
+        .eq('usuario_id', selectedUserId)
+        .eq('tipo', 'conceder')
+      exc?.forEach((r) => {
+        map[r.system_id] = true
+      })
+      setComPermissao(map)
+    }
+    carregarPermissoes()
   }, [selectedUserId])
 
   const toggleAccess = async (systemId: string, currentVal: boolean) => {
@@ -102,8 +134,16 @@ export function SystemAccessTab({ users }: { users: any[] }) {
       {selectedUserId ? (
         <div className="space-y-3">
           <p className="text-sm text-muted-foreground">
-            Marque os sistemas que o usuário selecionado poderá acessar no dashboard.
+            É aqui que se define o que a pessoa vê: só os sistemas marcados aparecem no Hub e no
+            menu lateral, e sistema desmarcado fica bloqueado mesmo que o papel permita. O que ela
+            pode fazer dentro de cada sistema vem dos papéis (abas "Matriz de Acesso" e "Papéis").
           </p>
+          {selectedUser?.role === 'admin' && (
+            <p className="text-sm text-amber-600">
+              Este usuário é administrador: vê e acessa todos os sistemas, independente do que
+              estiver marcado aqui.
+            </p>
+          )}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {systems.map((sys) => (
               <Card
@@ -122,6 +162,15 @@ export function SystemAccessTab({ users }: { users: any[] }) {
                         interno
                       </Badge>
                     )}
+                    {sys.visivel_no_hub &&
+                      userAccess[sys.id] &&
+                      !comPermissao[sys.id] &&
+                      selectedUser?.role !== 'admin' && (
+                        <p className="text-[11px] text-amber-600 mt-1 leading-snug">
+                          Nenhum papel dá permissão aqui: vê o cartão, mas as ações dentro do
+                          sistema podem ser negadas.
+                        </p>
+                      )}
                   </div>
                   <Checkbox
                     checked={!!userAccess[sys.id]}
