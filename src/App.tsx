@@ -12,6 +12,7 @@ import Layout from './components/Layout'
 const Index = lazy(() => import('./pages/Index'))
 const Dashboard = lazy(() => import('./pages/Dashboard'))
 const AdminPage = lazy(() => import('./pages/admin/AdminPage'))
+const MinhaConta = lazy(() => import('./pages/MinhaConta'))
 const NotFound = lazy(() => import('./pages/NotFound'))
 
 const LoadingFallback = () => (
@@ -32,6 +33,7 @@ const App = () => (
               <Route path="/" element={<Index />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/admin" element={<AdminPage />} />
+              <Route path="/minha-conta" element={<MinhaConta />} />
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>

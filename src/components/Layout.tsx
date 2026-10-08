@@ -1,7 +1,7 @@
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { Button } from '@/components/ui/button'
-import { LogOut, Settings } from 'lucide-react'
+import { KeyRound, LogOut, Settings } from 'lucide-react'
 import logoUrl from '@/assets/logotipo-verticalv1branco-0271a.png'
 import { SystemSwitcher } from '@/components/SystemSwitcher'
 
@@ -16,7 +16,10 @@ export default function Layout() {
   }
 
   const showHeader =
-    user && (location.pathname === '/dashboard' || location.pathname.startsWith('/admin'))
+    user &&
+    (location.pathname === '/dashboard' ||
+      location.pathname.startsWith('/admin') ||
+      location.pathname === '/minha-conta')
 
   return (
     <div className="min-h-screen bg-background flex flex-col font-sans">
@@ -48,6 +51,16 @@ export default function Layout() {
                   <span className="hidden sm:inline">Administração</span>
                 </Button>
               )}
+              {/* SPEC-187: qualquer usuário logado troca a própria senha. */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => navigate('/minha-conta')}
+                className={`text-muted-foreground hover:text-primary transition-colors ${location.pathname === '/minha-conta' ? 'text-primary bg-primary/10' : ''}`}
+              >
+                <KeyRound className="w-4 h-4 sm:mr-2" />
+                <span className="hidden sm:inline">Minha senha</span>
+              </Button>
               <Button
                 variant="outline"
                 size="sm"
