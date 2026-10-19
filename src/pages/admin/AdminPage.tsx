@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/use-auth'
 import { supabase } from '@/lib/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ShieldAlert, UserCog, Activity, KeySquare, UserX2, LayoutGrid } from 'lucide-react'
+import { ShieldAlert, UserCog, Activity, KeySquare, UserX2, LayoutGrid, History } from 'lucide-react'
 import { UsersTab } from './components/UsersTab'
 import { AccessTab } from './components/AccessTab'
 import { LogsTab } from './components/LogsTab'
@@ -11,6 +11,7 @@ import { RolesTab } from './components/RolesTab'
 import { ExceptionsTab } from './components/ExceptionsTab'
 import { AuditTab } from './components/AuditTab'
 import { SystemAccessTab } from './components/SystemAccessTab'
+import { MovimentacaoTab } from './components/MovimentacaoTab'
 
 export default function AdminPage() {
   const { profile, loading } = useAuth()
@@ -49,13 +50,20 @@ export default function AdminPage() {
       </div>
 
       <Tabs defaultValue="users" className="space-y-8">
-        <TabsList className="bg-card border border-border p-1.5 h-auto rounded-lg shadow-sm">
+        <TabsList className="bg-card border border-border p-1.5 h-auto rounded-lg shadow-sm flex-wrap justify-start">
           <TabsTrigger
             value="users"
             className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
           >
             <UserCog className="w-4 h-4 mr-2.5" />
             Gestão de Usuários
+          </TabsTrigger>
+          <TabsTrigger
+            value="movimentacao"
+            className="py-2.5 px-6 data-[state=active]:bg-primary/15 data-[state=active]:text-primary data-[state=active]:shadow-none transition-all rounded-md"
+          >
+            <History className="w-4 h-4 mr-2.5" />
+            Movimentação
           </TabsTrigger>
           <TabsTrigger
             value="access"
@@ -106,6 +114,11 @@ export default function AdminPage() {
           className="bg-card border border-border rounded-xl p-6 shadow-sm focus-visible:outline-none focus-visible:ring-0"
         >
           <UsersTab users={users} fetchUsers={fetchUsers} />
+        </TabsContent>
+
+        {/* SPEC-206: tudo que acontece nos sistemas (logins, alterações, aprovações, senhas). */}
+        <TabsContent value="movimentacao" className="focus-visible:outline-none focus-visible:ring-0">
+          <MovimentacaoTab users={users} />
         </TabsContent>
 
         <TabsContent value="access" className="focus-visible:outline-none focus-visible:ring-0">
