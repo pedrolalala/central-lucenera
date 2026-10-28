@@ -25,7 +25,12 @@ export default function AdminPage() {
   }, [profile, loading, navigate])
 
   const fetchUsers = async () => {
-    const { data } = await supabase.from('usuarios').select('*').order('nome')
+    // SPEC-238: revendedor do Catálogo Ubiqua não é usuário da Lucenera
+    const { data } = await supabase
+      .from('usuarios')
+      .select('*')
+      .eq('somente_ubiqua', false)
+      .order('nome')
     if (data) setUsers(data)
   }
 
